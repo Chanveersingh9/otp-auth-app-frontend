@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OTP-test-1 App</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom styles for gradients and animations not easily done with simple Tailwind classes */
+    .btn-gradient {
+        background: linear-gradient(135deg, #ffd700, #daa520);
+    }
+    .btn-gradient:hover {
+        background: linear-gradient(135deg, #ffe033, #ffd700);
+    }
+    .btn-disabled-gradient {
+        background: linear-gradient(135deg, #555, #444);
+    }
+    .border-gold-bottom {
+        border-bottom: 3px solid #ffd700;
+    }
+    .info-box-custom {
+        background-color: rgba(255, 215, 0, 0.1);
+        border: 1px dashed #ffd700;
+    }
+    .success-message-custom {
+        background-color: rgba(60, 179, 113, 0.2);
+    }
+    /* Keyframe for fade-in animation */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+        animation: fadeIn 0.5s ease-out;
+    }
+    /* Floating label effect - requires custom CSS */
+    .input-group {
+        position: relative;
+    }
+    .input-group label {
+        position: absolute;
+        top: -12px;
+        left: 15px;
+        background: #282828; /* Match card background */
+        padding: 0 7px;
+        font-size: 0.8125rem; /* 13px */
+        color: #ffd700;
+        z-index: 1;
+    }
+  </style>
+</head>
+<body class="font-inter bg-gray-950 flex flex-col items-center justify-center min-h-screen p-5 text-gray-100">
+  <div class="card bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-md border border-gray-700 box-border">
+    <h2 class="text-3xl font-extrabold text-white text-center mb-5 pb-4 border-gold-bottom">Welcome</h2>
+
+    <!-- Step 1: Email input -->
+    <div id="emailSection">
+      <div class="input-group mb-6">
+        <label for="email">Email Address</label>
+        <input type="email" autocomplete="email" id="email" placeholder=" " required 
+               class="w-full px-4 py-3 mt-2 rounded-lg border border-gray-600 text-white text-base
+                      bg-gray-700 focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400
+                      transition-all duration-300 ease-in-out placeholder-gray-400"/>
+      </div>
+      <button id="sendOtpBtn" 
+              class="w-full py-3 mb-4 rounded-lg btn-gradient text-gray-900 font-bold text-lg uppercase tracking-wide
+                     shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 ease-in-out">
+        Send OTP
+      </button>
+      <div class="text-center mt-5 text-sm">
+        Already have an account? <a href="https://otp-auth-app-fjax.onrender.com/login.html" class="text-yellow-400 font-bold hover:underline transition-colors duration-200">Login here</a>
+      </div>
+    </div>
+
+    <!-- Step 2: OTP verification -->
+    <div id="otpSection" class="hidden animate-fade-in">
+      <h3 class="text-xl font-bold text-yellow-400 text-center mb-5">Verify OTP</h3>
+      <div id="otpDisplay" class="info-box-custom rounded-lg p-4 text-center font-semibold text-yellow-400 mb-5 text-base">
+        An OTP has been sent to your email.
+      </div>
+      <div class="input-group mb-6">
+        <label for="otpInput">One-Time Password</label>
+        <input type="text" id="otpInput" placeholder=" " maxlength="6" inputmode="numeric" pattern="[0-9]*" required 
+               class="w-full px-4 py-3 mt-2 rounded-lg border border-gray-600 text-white text-base
+                      bg-gray-700 focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400
+                      transition-all duration-300 ease-in-out placeholder-gray-400"/>
+      </div>
+      <button id="verifyOtpBtn" 
+              class="w-full py-3 mb-4 rounded-lg btn-gradient text-gray-900 font-bold text-lg uppercase tracking-wide
+                     shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 ease-in-out">
+        Verify OTP
+      </button>
+      <button id="resendOtpBtn" disabled 
+              class="w-full py-3 rounded-lg btn-disabled-gradient text-gray-300 font-bold text-lg uppercase tracking-wide
+                     transition-all duration-300 ease-in-out disabled:cursor-not-allowed disabled:opacity-70">
+        Resend OTP (60s)
+      </button>
+    </div>
+
+    <!-- Step 3: Password setup -->
+    <div id="passwordSection" class="hidden animate-fade-in">
+      <h3 class="text-xl font-bold text-yellow-400 text-center mb-5">Set Your Password</h3>
+      <div class="input-group mb-6">
+        <label for="password">New Password</label>
+        <input type="password" id="password" placeholder=" " required 
+               class="w-full px-4 py-3 mt-2 rounded-lg border border-gray-600 text-white text-base
+                      bg-gray-700 focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400
+                      transition-all duration-300 ease-in-out placeholder-gray-400"/>
+      </div>
+      <div class="input-group mb-6">
+        <label for="confirmPassword">Confirm New Password</label>
+        <input type="password" id="confirmPassword" placeholder=" " required 
+               class="w-full px-4 py-3 mt-2 rounded-lg border border-gray-600 text-white text-base
+                      bg-gray-700 focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400
+                      transition-all duration-300 ease-in-out placeholder-gray-400"/>
+      </div>
+      <button id="setPasswordBtn" 
+              class="w-full py-3 rounded-lg btn-gradient text-gray-900 font-bold text-lg uppercase tracking-wide
+                     shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 ease-in-out">
+        Set Password
+      </button>
+    </div>
+
+    <p id="message" class="mt-5 text-center text-lg font-bold min-h-[25px] text-white"></p>
+  </div>
+
+<script>
+const msg = document.getElementById("message");
+const showMsg = (text, color = "text-white") => { // Tailwind class for color
+  msg.className = `mt-5 text-center text-lg font-bold min-h-[25px] ${color}`;
+  msg.textContent = text;
+  // Add a class for success messages to apply specific styling
+  if (color === "text-green-400") { // Tailwind class for green
+      msg.classList.add("success-message-custom");
+  } else {
+      msg.classList.remove("success-message-custom");
+  }
+};
+
+let resendTimer;
+const resendBtn = document.getElementById("resendOtpBtn");
+
+// Helper function to update button state with Tailwind classes
+function updateResendButtonState() {
+    if (resendBtn.disabled) {
+        resendBtn.classList.remove("btn-gradient");
+        resendBtn.classList.add("btn-disabled-gradient", "cursor-not-allowed", "opacity-70");
+    } else {
+        resendBtn.classList.remove("btn-disabled-gradient", "cursor-not-allowed", "opacity-70");
+        resendBtn.classList.add("btn-gradient");
+    }
+}
+
+// Step 1 – Send OTP
+document.getElementById("sendOtpBtn").onclick = async () => {
+  const email = document.getElementById("email").value.trim();
+  if (!email) { 
+    showMsg("Please enter a valid email.", "text-red-400"); 
+    return; 
+  }
+
+  showMsg("Sending OTP...", "text-gray-300"); // Indicate loading
+
+  try {
+    const response = await fetch('https://otp-auth-app-fjax.onrender.com/api/send-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    
+    const data = await response.json(); // Parse JSON first
+
+    // Check for userExists flag or 409 status code directly
+    if (response.status === 409 && data.userExists) { 
+      showMsg("This email is already registered. Redirecting to login...", "text-gray-300");
+      console.log("User exists. Initiating redirect to login page.");
+      setTimeout(() => window.location.href = "https://otp-auth-app-fjax.onrender.com/login.html", 1500);
+    } else if (response.ok) { // Handles successful OTP send (2xx status)
+      document.getElementById("emailSection").classList.add("hidden");
+      document.getElementById("otpSection").classList.remove("hidden");
+      document.getElementById("otpSection").classList.add("animate-fade-in");
+      showMsg("OTP sent to your email! Check your inbox.", "text-green-400");
+      startResendCooldown();
+    } else { // Handles other errors (e.g., 400, 500)
+      showMsg(data.message || "Error sending OTP", "text-red-400");
+    }
+  } catch (err) {
+    console.error("Error sending OTP:", err);
+    showMsg("Network error. Please try again.", "text-red-400");
+  }
+};
+
+// Step 2 – Verify OTP
+document.getElementById("verifyOtpBtn").onclick = async () => {
+  const email = document.getElementById("email").value.trim();
+  const otp   = document.getElementById("otpInput").value.trim();
+
+  if (!email || !otp) {
+    showMsg("Please enter both email and OTP", "text-red-400");
+    return;
+  }
+
+  const btn = document.getElementById("verifyOtpBtn");
+  const oldText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = "Verifying…";
+  showMsg("Verifying OTP...", "text-gray-300"); // Indicate loading
+
+  try {
+    const res = await fetch("https://otp-auth-app-fjax.onrender.com/api/verify-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, otp })
+    });
+
+    let data = {};
+    try { data = await res.json(); } catch (e) {
+        console.error("Failed to parse JSON response:", e);
+    }
+
+    if (res.status === 409) { // User exists
+      showMsg("User already exists. Redirecting to login…", "text-gray-300");
+      setTimeout(() => window.location.href = "https://otp-auth-app-fjax.onrender.com/login.html", 1500);
+      return;
+    }
+    if (res.status === 400) {
+      showMsg(data.message || "Invalid or expired OTP", "text-red-400");
+      return;
+    }
+    if (!res.ok) {
+      showMsg("Server error. Try again later.", "text-red-400");
+      return;
+    }
+
+    document.getElementById("otpSection").classList.add("hidden");
+    document.getElementById("passwordSection").classList.remove("hidden");
+    document.getElementById("passwordSection").classList.add("animate-fade-in");
+    showMsg("OTP verified! Now, set your password.", "text-green-400");
+
+  } catch (err) {
+    console.error("Network error during verification:", err);
+    showMsg("Network error during verification. Please try again.", "text-red-400");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = oldText;
+  }
+};
+
+// Step 3 – Set Password
+document.getElementById("setPasswordBtn").onclick = async () => {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const confirmPassword = document.getElementById("confirmPassword").value;
+
+  if (password.length < 6) { // Basic password strength check
+    showMsg("Password must be at least 6 characters long.", "text-red-400");
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    showMsg("Passwords do not match. Please re-enter.", "text-red-400");
+    return;
+  }
+
+  showMsg("Setting password...", "text-gray-300"); // Indicate loading
+
+  try {
+    const response = await fetch('https://otp-auth-app-fjax.onrender.com/api/set-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    
+    const data = await response.json();
+    if (response.ok) {
+      document.getElementById("passwordSection").classList.add("hidden");
+      showMsg("Password set successfully! You can now login.", "text-green-400");
+      // Optional: Redirect to login page after a short delay
+      setTimeout(() => window.location.href = "https://otp-auth-app-fjax.onrender.com/login.html", 2000);
+    } else {
+      showMsg(data.message || "Error setting password", "text-red-400");
+    }
+  } catch (err) {
+    console.error("Error setting password:", err);
+    showMsg("Network error. Please try again.", "text-red-400");
+  }
+};
+
+// Resend OTP logic
+resendBtn.onclick = async () => {
+  const email = document.getElementById("email").value.trim();
+  if (!email) {
+    showMsg("Email not found. Please refresh and try again.", "text-red-400");
+    return;
+  }
+
+  showMsg("Resending OTP...", "text-gray-300"); // Indicate loading
+
+  try {
+    const response = await fetch("https://otp-auth-app-fjax.onrender.com/api/send-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      showMsg("OTP resent to your email! Check your inbox.", "text-green-400");
+      startResendCooldown();
+    } else {
+      showMsg(data.message || "Error resending OTP", "text-red-400");
+    }
+  } catch (err) {
+    console.error("Error resending OTP:", err);
+    showMsg("Network error. Please try again.", "text-red-400");
+  }
+};
+
+function startResendCooldown(duration = 60) { // Increased cooldown to 60 seconds
+  resendBtn.disabled = true;
+  updateResendButtonState(); // Update button appearance
+
+  let timeLeft = duration;
+  resendBtn.textContent = `Resend OTP (${timeLeft}s)`;
+
+  if (resendTimer) clearInterval(resendTimer); // Clear existing timer if any
+
+  resendTimer = setInterval(() => {
+    timeLeft--;
+    resendBtn.textContent = `Resend OTP (${timeLeft}s)`;
+
+    if (timeLeft <= 0) {
+      clearInterval(resendTimer);
+      resendBtn.disabled = false;
+      resendBtn.textContent = "Resend OTP";
+      updateResendButtonState(); // Update button appearance
+    }
+  }, 1000);
+}
+
+// Add event listeners for floating labels
+document.addEventListener('DOMContentLoaded', () => {
+    const inputs = document.querySelectorAll('.input-group input');
+    inputs.forEach(input => {
+        // Add placeholder for visual consistency with floating label
+        if (!input.placeholder) {
+            input.placeholder = " "; 
+        }
+    });
+});
+
+</script>
+</body>
+</html>

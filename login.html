@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login to Your Account</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* Custom styles for a more polished look */
+    body {
+        font-family: 'Inter', sans-serif;
+    }
+    .btn-gradient {
+        background: linear-gradient(135deg, #ffd700, #daa520);
+        transition: all 0.3s ease-in-out;
+    }
+    .btn-gradient:hover {
+        background: linear-gradient(135deg, #ffe033, #ffd700);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 215, 0, 0.2);
+    }
+    .btn-disabled-gradient {
+        background: linear-gradient(135deg, #555, #444);
+    }
+    .border-gold-bottom {
+        border-bottom: 3px solid #ffd700;
+    }
+    .info-box-custom {
+        background-color: rgba(255, 215, 0, 0.1);
+        border-left: 4px solid #ffd700;
+    }
+    .success-message-custom {
+        background-color: rgba(60, 179, 113, 0.2);
+        border-left: 4px solid #3cb371;
+    }
+    /* Keyframe for fade-in animation */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+        animation: fadeIn 0.5s ease-out;
+    }
+    /* Floating label effect */
+    .input-group {
+        position: relative;
+    }
+    .input-group input:focus ~ label,
+    .input-group input:not(:placeholder-shown) ~ label {
+        top: -0.75rem;
+        left: 0.75rem;
+        font-size: 0.75rem;
+        color: #ffd700;
+        padding: 0 0.25rem;
+        background-color: #1f2937; /* bg-gray-800 */
+    }
+    .input-group label {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        color: #9ca3af; /* text-gray-400 */
+        transition: all 0.2s ease-in-out;
+        pointer-events: none;
+    }
+  </style>
+</head>
+<body class="font-inter bg-gray-900 flex flex-col items-center justify-center min-h-screen p-4 text-gray-100">
+  <div class="bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-md border border-gray-700">
+    <h2 id="formTitle" class="text-3xl font-extrabold text-white text-center mb-6 pb-4 border-gold-bottom">Login to Your Account</h2>
+
+    <!-- Login Section -->
+    <div id="loginSection">
+      <div class="input-group mb-6">
+        <input type="email" autocomplete="email" id="loginEmail" placeholder=" " required 
+               class="w-full px-4 py-3 rounded-lg border border-gray-600 text-white bg-gray-700 focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 peer"/>
+        <label for="loginEmail">Email Address</label>
+      </div>
+      <div class="input-group mb-6">
+        <input type="password" id="loginPassword" placeholder=" " required 
+               class="w-full px-4 py-3 rounded-lg border border-gray-600 text-white bg-gray-700 focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 peer"/>
+        <label for="loginPassword">Password</label>
+      </div>
+      <button id="loginBtn" 
+              class="w-full py-3 mb-4 rounded-lg btn-gradient text-gray-900 font-bold text-lg uppercase tracking-wider shadow-lg">
+        Login
+      </button>
+      <div class="text-center mt-4 text-sm">
+        <a href="#" id="forgotPasswordLink" class="text-yellow-400 font-bold hover:underline">Forgot Password?</a>
+      </div>
+      <div class="text-center mt-3 text-sm">
+        <span>Don't have an account? </span><a href="https://otp-auth-app-fjax.onrender.com" class="text-yellow-400 font-bold hover:underline">Register here</a>
+      </div>
+    </div>
+
+    <!-- Forgot Password Section -->
+    <div id="forgotPasswordSection" class="hidden animate-fade-in">
+        <div class="info-box-custom rounded-lg p-3 text-center text-yellow-300 mb-5 text-sm">
+            Enter your email to receive a password reset OTP.
+        </div>
+        <div class="input-group mb-6">
+            <input type="email" id="forgotEmail" placeholder=" " required 
+                   class="w-full px-4 py-3 rounded-lg border border-gray-600 text-white bg-gray-700 focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 peer"/>
+            <label for="forgotEmail">Email Address</label>
+        </div>
+        <button id="sendResetOtpBtn" 
+                class="w-full py-3 mb-4 rounded-lg btn-gradient text-gray-900 font-bold text-lg uppercase tracking-wider shadow-lg">
+            Send Reset OTP
+        </button>
+        <div class="text-center mt-4 text-sm">
+            <a href="#" id="backToLoginLink" class="text-yellow-400 font-bold hover:underline">Back to Login</a>
+        </div>
+    </div>
+
+    <!-- Reset Password Section -->
+    <div id="resetPasswordSection" class="hidden animate-fade-in">
+        <div id="resetOtpDisplay" class="info-box-custom rounded-lg p-3 text-center text-yellow-300 mb-5 text-sm">
+            An OTP has been sent to your email for password reset.
+        </div>
+        <div class="input-group mb-4">
+            <input type="text" id="resetOtpInput" placeholder=" " maxlength="6" inputmode="numeric" pattern="[0-9]*" required 
+                   class="w-full px-4 py-3 rounded-lg border border-gray-600 text-white bg-gray-700 focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 peer"/>
+            <label for="resetOtpInput">One-Time Password</label>
+        </div>
+        <div class="input-group mb-6">
+            <input type="password" id="newPassword" placeholder=" " required 
+                   class="w-full px-4 py-3 rounded-lg border border-gray-600 text-white bg-gray-700 focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 peer"/>
+            <label for="newPassword">New Password</label>
+        </div>
+        <div class="input-group mb-6">
+            <input type="password" id="confirmNewPassword" placeholder=" " required 
+                   class="w-full px-4 py-3 rounded-lg border border-gray-600 text-white bg-gray-700 focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 peer"/>
+            <label for="confirmNewPassword">Confirm New Password</label>
+        </div>
+        <button id="resetPasswordBtn" 
+                class="w-full py-3 mb-4 rounded-lg btn-gradient text-gray-900 font-bold text-lg uppercase tracking-wider shadow-lg">
+            Reset Password
+        </button>
+        <button id="resendResetOtpBtn" disabled 
+                class="w-full py-2.5 mb-4 rounded-lg btn-disabled-gradient text-gray-400 font-semibold uppercase tracking-wider transition-all duration-300 disabled:cursor-not-allowed">
+            Resend OTP (60s)
+        </button>
+        <div class="text-center mt-2 text-sm">
+            <a href="#" id="backToLoginFromResetLink" class="text-yellow-400 font-bold hover:underline">Back to Login</a>
+        </div>
+    </div>
+
+    <!-- Message Area -->
+    <p id="message" class="mt-5 text-center text-base font-semibold min-h-[24px] text-white transition-all duration-300"></p>
+  </div>
+
+<script>
+    // --- DOM Element References ---
+    const loginSection = document.getElementById('loginSection');
+    const forgotPasswordSection = document.getElementById('forgotPasswordSection');
+    const resetPasswordSection = document.getElementById('resetPasswordSection');
+    const formTitle = document.getElementById('formTitle');
+    const messageEl = document.getElementById("message");
+    const resendResetOtpBtn = document.getElementById("resendResetOtpBtn");
+    const loginBtn = document.getElementById("loginBtn");
+    const sendResetOtpBtn = document.getElementById("sendResetOtpBtn");
+    const resetPasswordBtn = document.getElementById("resetPasswordBtn");
+    
+    let resetResendTimer;
+    const API_BASE_URL = 'https://otp-auth-app-fjax.onrender.com/api';
+
+    // --- UI Helper Functions ---
+    const showMsg = (text, type = "neutral") => {
+        messageEl.textContent = text;
+        messageEl.className = "mt-5 text-center text-base font-semibold min-h-[24px] transition-all duration-300"; // Reset classes
+        switch (type) {
+            case "success":
+                messageEl.classList.add("text-green-400", "success-message-custom", "p-3", "rounded-lg");
+                break;
+            case "error":
+                messageEl.classList.add("text-red-400");
+                break;
+            case "loading":
+                messageEl.classList.add("text-gray-300");
+                break;
+            default:
+                 messageEl.classList.add("text-white");
+        }
+    };
+
+    const updateResetResendButtonState = (enable) => {
+        resendResetOtpBtn.disabled = !enable;
+        if (enable) {
+            resendResetOtpBtn.classList.replace("btn-disabled-gradient", "btn-gradient");
+            resendResetOtpBtn.classList.remove("cursor-not-allowed", "opacity-70");
+            resendResetOtpBtn.textContent = "Resend OTP";
+        } else {
+            resendResetOtpBtn.classList.replace("btn-gradient", "btn-disabled-gradient");
+            resendResetOtpBtn.classList.add("cursor-not-allowed", "opacity-70");
+        }
+    };
+
+    const startResetResendCooldown = (duration = 60) => {
+        clearInterval(resetResendTimer);
+        updateResetResendButtonState(false);
+        let timeLeft = duration;
+        resendResetOtpBtn.textContent = `Resend OTP (${timeLeft}s)`;
+
+        resetResendTimer = setInterval(() => {
+            timeLeft--;
+            resendResetOtpBtn.textContent = `Resend OTP (${timeLeft}s)`;
+            if (timeLeft <= 0) {
+                clearInterval(resetResendTimer);
+                updateResetResendButtonState(true);
+            }
+        }, 1000);
+    };
+
+    const showSection = (sectionId, title) => {
+        loginSection.classList.add('hidden');
+        forgotPasswordSection.classList.add('hidden');
+        resetPasswordSection.classList.add('hidden');
+        
+        document.getElementById(sectionId).classList.remove('hidden');
+        document.getElementById(sectionId).classList.add('animate-fade-in');
+        
+        formTitle.textContent = title;
+        showMsg(""); // Clear messages on section change
+    };
+
+    // --- Navigation ---
+    document.getElementById("forgotPasswordLink").onclick = (e) => { e.preventDefault(); showSection("forgotPasswordSection", "Reset Password"); };
+    document.getElementById("backToLoginLink").onclick = (e) => { e.preventDefault(); showSection("loginSection", "Login to Your Account"); };
+    document.getElementById("backToLoginFromResetLink").onclick = (e) => { e.preventDefault(); showSection("loginSection", "Login to Your Account"); };
+
+    // --- API Call Logic ---
+    const apiCall = async (endpoint, body, button) => {
+        const originalText = button.textContent;
+        button.disabled = true;
+        showMsg("Processing...", "loading");
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            const data = await response.json();
+            return { ok: response.ok, data };
+        } catch (err) {
+            console.error(`Error during ${endpoint} call:`, err);
+            showMsg("Network error. Please check your connection.", "error");
+            return { ok: false, data: { message: "Network error." } };
+        } finally {
+            button.disabled = false;
+            button.textContent = originalText;
+        }
+    };
+
+    // --- Event Handlers ---
+
+    // Login
+    loginBtn.onclick = async () => {
+        const email = document.getElementById("loginEmail").value.trim();
+        const password = document.getElementById("loginPassword").value;
+        if (!email || !password) {
+            showMsg("Please enter both email and password.", "error");
+            return;
+        }
+
+        const { ok, data } = await apiCall('login', { email, password }, loginBtn);
+        if (ok) {
+            showMsg("Login successful! Welcome back.", "success");
+            // In a real app, you would save a token and redirect:
+            // localStorage.setItem('authToken', data.token);
+            // window.location.href = "/dashboard";
+        } else {
+            showMsg(data.message || "Login failed. Check credentials.", "error");
+        }
+    };
+
+    // Forgot Password
+    sendResetOtpBtn.onclick = async () => {
+        const email = document.getElementById("forgotEmail").value.trim();
+        if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+            showMsg("Please enter a valid email address.", "error");
+            return;
+        }
+
+        const { ok, data } = await apiCall('forgot-password', { email }, sendResetOtpBtn);
+        if (ok) {
+            showSection("resetPasswordSection", "Set New Password");
+            showMsg("Password reset OTP sent to your email.", "success");
+            startResetResendCooldown();
+        } else {
+            showMsg(data.message || "Error sending reset OTP.", "error");
+        }
+    };
+    
+    // Reset Password
+    resetPasswordBtn.onclick = async () => {
+        const email = document.getElementById("forgotEmail").value.trim();
+        const otp = document.getElementById("resetOtpInput").value.trim();
+        const newPassword = document.getElementById("newPassword").value;
+        const confirmNewPassword = document.getElementById("confirmNewPassword").value;
+
+        if (!otp || !newPassword || !confirmNewPassword) {
+            showMsg("All fields are required.", "error"); return;
+        }
+        if (newPassword.length < 6) {
+            showMsg("New password must be at least 6 characters.", "error"); return;
+        }
+        if (newPassword !== confirmNewPassword) {
+            showMsg("New passwords do not match.", "error"); return;
+        }
+
+        const { ok, data } = await apiCall('reset-password', { email, otp, newPassword }, resetPasswordBtn);
+        if (ok) {
+            showMsg("Password reset successfully! Redirecting to login...", "success");
+            setTimeout(() => showSection("loginSection", "Login to Your Account"), 2500);
+        } else {
+            showMsg(data.message || "Error resetting password.", "error");
+        }
+    };
+
+    // Resend Reset OTP
+    resendResetOtpBtn.onclick = async () => {
+        const email = document.getElementById("forgotEmail").value.trim();
+        if (!email) return;
+
+        const { ok, data } = await apiCall('forgot-password', { email }, resendResetOtpBtn);
+        if (ok) {
+            showMsg("A new reset OTP has been sent.", "success");
+            startResetResendCooldown();
+        } else {
+            showMsg(data.message || "Failed to resend OTP.", "error");
+        }
+    };
+</script>
+</body>
+</html>
