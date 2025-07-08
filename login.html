@@ -93,7 +93,7 @@
         <a href="#" id="forgotPasswordLink" class="text-yellow-400 font-bold hover:underline">Forgot Password?</a>
       </div>
       <div class="text-center mt-3 text-sm">
-        <span>Don't have an account? </span><a href="https://otp-auth-app-fjax.onrender.com" class="text-yellow-400 font-bold hover:underline">Register here</a>
+        <span>Don't have an account? </span><a href="https://otp-auth-app-frontend1.vercel.app" class="text-yellow-400 font-bold hover:underline">Register here</a>
       </div>
     </div>
 
@@ -166,7 +166,8 @@
     const resetPasswordBtn = document.getElementById("resetPasswordBtn");
     
     let resetResendTimer;
-    const API_BASE_URL = 'https://otp-auth-app-fjax.onrender.com/api';
+    // API_BASE_URL remains the backend URL
+    const API_BASE_URL = 'https://otp-auth-app-fjax.onrender.com';
 
     // --- UI Helper Functions ---
     const showMsg = (text, type = "neutral") => {
@@ -239,7 +240,7 @@
         showMsg("Processing...", "loading");
 
         try {
-            const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
+            const response = await fetch(`${API_BASE_URL}/api/${endpoint}`, { 
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body)
